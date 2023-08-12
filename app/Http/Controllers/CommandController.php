@@ -49,7 +49,7 @@ class CommandController extends Controller
 
             $jsonData = '{
                 "EndUserIp": "192.168.0.106",
-                "TokenId": "2e123811-c8c4-4341-8301-a864b04a19a8",
+                "TokenId": "815fed09-110b-48ad-8a3b-71f8cb1d28c1",
                 "AdultCount": "1",
                 "ChildCount": "0",
                 "InfantCount": "0",
@@ -73,7 +73,14 @@ class CommandController extends Controller
             $errorCode = $searchResponse['Response']['Error']['ErrorCode'];
             $errorMessage = $searchResponse['Response']['Error']['ErrorMessage'];
             // $welcome = $searchResponse['Response']['Results'][0][0]['Segments'];
-            // dd($searchResponse);
+            dd($searchResponse);
+            if($errorCode != "25" AND $errorMessage != "")
+            {
+                $commandRow->errorMessage = $errorMessage;
+                $this->sendEmail('dinnis067@gmail.com', $commandRow);
+                // moyonam5@gmail.com
+                goto endLoop;        
+            }
             $flightResults = $searchResponse['Response']['Results'][0];
             // dd($errorMessage);
             // dd($flightResults);
@@ -98,6 +105,7 @@ class CommandController extends Controller
                             if($errorCode != "25")
                             {
                                 $this->sendEmail('dinnis067@gmail.com', $commandRow);
+                                // moyonam5@gmail.com
                                 goto endLoop;        
                             }
                         }
